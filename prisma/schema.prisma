@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  nome  String
+  senha String
+}
+
+model Participante {
+  id   Int     @id @default(autoincrement())
+  nome String
+  sexo String?
+}
+
+model Evento {
+  id          Int       @id @default(autoincrement())
+  titulo      String
+  data_inicio DateTime
+  descricao   String
+  reservas    Reserva[]
+}
+
+model Local {
+  id         Int       @id @default(autoincrement())
+  nome       String
+  capacidade Int
+  reservas   Reserva[]
+}
+
+model Reserva {
+  id_local     Int
+  id_evento    Int
+  data_reserva DateTime
+  status       Boolean
+
+  evento Evento @relation(fields: [id_evento], references: [id])
+  local  Local  @relation(fields: [id_local], references: [id])
+
+  @@id([id_evento, id_local, data_reserva])
+}
