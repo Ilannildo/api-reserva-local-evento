@@ -3,20 +3,21 @@ import { clientePrisma } from "../prisma";
 
 export const criarReserva = async (requisicao: Request, resposta: Response) => {
   try {
-    const { id_evento, id_local, data_reserva } = requisicao.body;
+    const { id_local, data_reserva, titulo, descricao } = requisicao.body;
 
-    const evento = await clientePrisma.reserva.create({
+    const reserva = await clientePrisma.reserva.create({
       data: {
         data_reserva: new Date(data_reserva),
         status: true,
         evento: {
-          connect: {
-            id: id_evento,
+          create: {
+            titulo,
+            descricao,
           },
         },
         local: {
           connect: {
-            id: id_local,
+            id: Number(id_local),
           },
         },
       },
@@ -25,10 +26,11 @@ export const criarReserva = async (requisicao: Request, resposta: Response) => {
     return resposta
       .json({
         mensagem: "Reserva criada com sucesso!",
-        evento: evento,
+        reserva: reserva,
       })
       .status(201);
   } catch (error: any) {
+    console.log("ERRO::", error);
     return resposta.json({
       mensagem: "Ocorreu um erro inesperado",
     });
@@ -97,6 +99,34 @@ export const buscarReservaPorIdLocal = async (
         })
         .status(404);
     }
+
+    return resposta
+      .json({
+        mensagem: "Reservas encontradas com sucesso",
+        reservas: reservas,
+      })
+      .status(200);
+  } catch (error: any) {
+    return resposta.json({
+      mensagem: "Ocorreu um erro inesperado",
+    });
+  }
+};
+
+export const buscarReservas = async (
+  requisicao: Request,
+  resposta: Response
+) => {
+  try {
+    const reservas = await clientePrisma.reserva.findMany({
+      include: {
+        evento: true,
+        local: true,
+      },
+      orderBy: {
+        data_reserva: "desc"
+      }
+    });
 
     return resposta
       .json({

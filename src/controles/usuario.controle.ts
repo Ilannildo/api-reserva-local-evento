@@ -74,6 +74,7 @@ export const loginUsuario = async (requisicao: Request, resposta: Response) => {
       return resposta
         .json({
           mensagem: "Email ou senha inválidos",
+          sucesso: false,
         })
         .status(404);
     }
@@ -82,6 +83,7 @@ export const loginUsuario = async (requisicao: Request, resposta: Response) => {
       return resposta
         .json({
           mensagem: "Email ou senha inválidos",
+          sucesso: false,
         })
         .status(404);
     }
@@ -90,11 +92,13 @@ export const loginUsuario = async (requisicao: Request, resposta: Response) => {
       .json({
         mensagem: "Login feito com sucesso",
         usuario: usuario,
+        sucesso: true,
       })
       .status(200);
   } catch (error: any) {
     return resposta.json({
       mensagem: "Ocorreu um erro inesperado",
+      sucesso: false,
     });
   }
 };

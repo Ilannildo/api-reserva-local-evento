@@ -55,3 +55,18 @@ export const buscarLocal = async (requisicao: Request, resposta: Response) => {
     });
   }
 };
+export const buscarTodos = async (requisicao: Request, resposta: Response) => {
+  try {
+    const local = await clientePrisma.local.findMany();
+
+    return resposta
+      .json({
+        locais: local,
+      })
+      .status(200);
+  } catch (error: any) {
+    return resposta.json({
+      mensagem: "Ocorreu um erro inesperado",
+    });
+  }
+};

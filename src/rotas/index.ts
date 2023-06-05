@@ -22,6 +22,9 @@ rotas
   .route("/local")
   .post((requisicao: Request, resposta: Response) =>
     controleLocal.criarLocal(requisicao, resposta)
+  )
+  .get((requisicao: Request, resposta: Response) =>
+    controleLocal.buscarTodos(requisicao, resposta)
   );
 
 rotas
@@ -34,6 +37,9 @@ rotas
   .route("/reserva")
   .post((requisicao: Request, resposta: Response) =>
     controleReserva.criarReserva(requisicao, resposta)
+  )
+  .get((requisicao: Request, resposta: Response) =>
+    controleReserva.buscarReservas(requisicao, resposta)
   );
 
 rotas

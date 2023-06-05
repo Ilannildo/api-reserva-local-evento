@@ -3,13 +3,12 @@ import { clientePrisma } from "../prisma";
 
 export const criarEvento = async (requisicao: Request, resposta: Response) => {
   try {
-    const { titulo, descricao, data_inicio } = requisicao.body;
+    const { titulo, descricao } = requisicao.body;
 
     const evento = await clientePrisma.evento.create({
       data: {
         titulo,
         descricao,
-        data_inicio: new Date(data_inicio),
       },
     });
 
